@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OrthoNow Bengaluru — Specialist Orthopaedic Consultations for Knee and Back Pain. 9 locations across Bengaluru. Quick recovery, expert clinical care.">
+  <title>Banish Back & Knee Pain | OrthoNow Bengaluru</title>
+  
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & VARIABLES
+       ========================================================================== */
+    :root {
+      /* Theme Colors - Curated Dark Medical Palette */
+      --bg-base: hsl(224, 25%, 8%);
+      --bg-card: hsl(223, 24%, 12%);
+      --text-main: hsl(210, 40%, 98%);
+      --text-muted: hsl(217, 13%, 68%);
+      
+      /* Accents - Neon Teal & Clinical Blues */
+      --accent-teal: hsl(172, 90%, 46%);
+      --accent-teal-glow: hsla(172, 90%, 46%, 0.15);
+      --accent-blue: hsl(211, 100%, 53%);
+      --accent-blue-glow: hsla(211, 100%, 53%, 0.2);
+      
+      /* UI Indicators */
+      --color-success: hsl(142, 70%, 45%);
+      --color-error: hsl(0, 84%, 60%);
+      
+      /* Visual Assets */
+      --border-radius-lg: 16px;
+      --border-radius-sm: 8px;
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      /* High-performance system-only font stack */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-main);
+    }
+
+    a {
+      color: var(--accent-teal);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    a:hover {
+      color: var(--text-main);
+    }
+
+    /* Container Utility */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       HEADER STYLES
+       ========================================================================== */
+    header {
+      width: 100%;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 0;
+      background-color: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Interactive Logo */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+    }
+
+    .logo-svg {
+      width: 32px;
+      height: 32px;
+      fill: none;
+      stroke: var(--accent-teal);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .logo-text span {
+      color: var(--accent-teal);
+    }
+
+    /* Header Call Widget */
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.03);
+      padding: 8px 16px;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: var(--transition-smooth);
+      color: var(--text-main);
+    }
+
+    .header-cta:hover {
+      background-color: var(--accent-teal-glow);
+      border-color: var(--accent-teal);
+      transform: translateY(-1px);
+    }
+
+    .phone-icon-svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: var(--accent-teal);
+      stroke-width: 2;
+    }
+
+    /* ==========================================================================
+       MAIN HERO SECTION (MOBILE-FIRST GRID)
+       ========================================================================== */
+    .hero-section {
+      padding: 40px 0 80px 0;
+      background: radial-gradient(circle at 80% 20%, var(--accent-blue-glow) 0%, transparent 50%),
+                  radial-gradient(circle at 10% 80%, var(--accent-teal-glow) 0%, transparent 50%);
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 64px;
+      }
+    }
+
+    /* ==========================================================================
+       COPYWRITING & VALUES
+       ========================================================================== */
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .badge-corporate {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent-teal);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-teal);
+      animation: pulse 1.8s infinite;
+    }
+
+    h1.hero-headline {
+      font-size: 2.25rem;
+      letter-spacing: -1px;
+      color: var(--text-main);
+    }
+
+    @media (min-width: 768px) {
+      h1.hero-headline {
+        font-size: 3.25rem;
+      }
+    }
+
+    .hero-headline span {
+      background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subheadline {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 580px;
+    }
+
+    /* Clinic Locations Inline Badge List */
+    .clinic-locations-badge {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .location-tag {
+      background-color: rgba(255, 255, 255, 0.03);
+      padding: 6px 12px;
+      border-radius: var(--border-radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* ==========================================================================
+       TRUST ELEMENT
+       ========================================================================== */
+    .trust-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .star-svg {
+      width: 18px;
+      height: 18px;
+      fill: hsl(45, 100%, 50%);
+    }
+
+    .trust-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .trust-text strong {
+      color: var(--text-main);
+    }
+
+    /* ==========================================================================
+       LEAD FORM COMPONENT
+       ========================================================================== */
+    .form-card {
+      background-color: var(--bg-card);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      /* Prevent height shifts by reserving minimum height matching standard state */
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Visual accent line at top of form */
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+    }
+
+    .form-title {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .form-description {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .lead-form-element {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Input Styling & Error Layout Shifts Prevention */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--border-radius-sm);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 3px var(--accent-teal-glow);
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .form-input::placeholder {
+      color: hsl(215, 8%, 45%);
+    }
+
+    /* Space reservation for errors (prevents Layout Shift) */
+    .error-wrapper {
+      min-height: 18px;
+      margin-top: 2px;
+    }
+
+    .error-message {
+      font-size: 0.78rem;
+      color: var(--color-error);
+      display: none;
+    }
+
+    .error-message.active {
+      display: block;
+    }
+
+    /* Submit Button (Primary CTA) */
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-blue) 100%);
+      color: var(--bg-base);
+      border: none;
+      border-radius: var(--border-radius-sm);
+      padding: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--accent-teal-glow);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(13, 218, 187, 0.3);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .arrow-icon-svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--bg-base);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-submit:hover .arrow-icon-svg {
+      transform: translateX(4px);
+    }
+
+    /* Form Privacy Note */
+    .form-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 14px;
+    }
+
+    /* ==========================================================================
+       THANK-YOU STATE (INLINE TRANSITION)
+       ========================================================================== */
+    .thankyou-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 16px 0;
+      animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .success-icon-svg {
+      width: 64px;
+      height: 64px;
+      stroke: var(--color-success);
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-bottom: 20px;
+    }
+
+    .thankyou-title {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: var(--color-success);
+    }
+
+    .thankyou-message {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* High-intent secondary CTA: Direct WhatsApp Chat */
+    .btn-whatsapp-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: hsl(142, 70%, 15%);
+      border: 1px solid var(--color-success);
+      color: hsl(142, 70%, 95%);
+      padding: 12px 24px;
+      border-radius: var(--border-radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-whatsapp-success:hover {
+      background-color: var(--color-success);
+      color: var(--bg-base);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-icon-svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* ==========================================================================
+       FOOTER & LEGALS
+       ========================================================================== */
+    footer {
+      width: 100%;
+      padding: 32px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background-color: rgba(0, 0, 0, 0.2);
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-flex {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-copyright {
+      font-size: 0.78rem;
+      color: hsl(215, 8%, 35%);
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(13, 218, 187, 0.7);
+      }
+      70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 8px rgba(13, 218, 187, 0);
+      }
+      100% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(13, 218, 187, 0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo-container">
+        <!-- Inline SVG logo showing stylized medical ortho representation -->
+        <svg class="logo-svg" viewBox="0 0 24 24">
+          <path d="M4 19V5M12 21V3M20 19V5M4 12h16"/>
+        </svg>
+        <div class="logo-text">Ortho<span>Now</span></div>
+      </div>
+      
+      <!-- Call Widget -->
+      <a href="tel:+918040005000" class="header-cta" id="headerCallBtn">
+        <svg class="phone-icon-svg" viewBox="0 0 24 24">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <span>Call Now</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN AREA -->
+  <main class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        
+        <!-- COPYWRITING (LEFT / TOP) -->
+        <div class="hero-copy">
+          <div class="badge-corporate">
+            <span class="pulse-dot"></span>
+            Bengaluru Professionals
+          </div>
+          
+          <h1 class="hero-headline">
+            Sitting all day at your tech job? <span>Banish Back & Knee Pain.</span>
+          </h1>
+          
+          <p class="hero-subheadline">
+            Avoid invasive surgery. Restore pain-free movement with Bengaluru’s leading orthopaedic network. Fast-track recovery designed for busy professionals.
+          </p>
+          
+          <div class="clinic-locations-badge">
+            <span class="location-tag">Indiranagar</span>
+            <span class="location-tag">Jayanagar</span>
+            <span class="location-tag">Whitefield</span>
+            <span class="location-tag">Koramangala</span>
+            <span class="location-tag">HSR Layout</span>
+            <span class="location-tag">Hebbal</span>
+            <span class="location-tag">JP Nagar</span>
+            <span class="location-tag">Malleshwaram</span>
+            <span class="location-tag">Electronic City</span>
+          </div>
+
+          <!-- Trust Element -->
+          <div class="trust-container">
+            <div class="stars-row">
+              <!-- 5 SVG Stars inline -->
+              <svg class="star-svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg class="star-svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg class="star-svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg class="star-svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg class="star-svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div class="trust-text">
+              Ranked <strong>#1 Orthopaedic Network</strong> by 12,000+ Bengaluru patients.
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM CARD (RIGHT / BOTTOM) -->
+        <div class="form-card" id="formCard">
+          
+          <!-- FORM STATE -->
+          <div id="formState">
+            <h2 class="form-title">Book a Consultation</h2>
+            <p class="form-description">Fill details for a priority appointment check.</p>
+            
+            <form id="leadForm" class="lead-form-element" data-location="hero" novalidate>
+              <!-- Name Input Container -->
+              <div class="input-group">
+                <input 
+                  type="text" 
+                  id="leadName" 
+                  class="form-input" 
+                  placeholder="Full Name" 
+                  autocomplete="name" 
+                  required
+                >
+                <div class="error-wrapper">
+                  <span id="nameError" class="error-message">Please enter your full name.</span>
+                </div>
+              </div>
+              
+              <!-- Phone Input Container -->
+              <div class="input-group">
+                <input 
+                  type="tel" 
+                  id="leadPhone" 
+                  class="form-input" 
+                  placeholder="Phone Number (10-Digit)" 
+                  autocomplete="tel" 
+                  required
+                >
+                <div class="error-wrapper">
+                  <span id="phoneError" class="error-message">Enter a valid 10-digit mobile number (e.g. 9876543210).</span>
+                </div>
+              </div>
+
+              <!-- Primary Submit CTA -->
+              <button type="submit" class="btn-submit" id="submitBtn">
+                <span>Book Appointment</span>
+                <svg class="arrow-icon-svg" viewBox="0 0 24 24">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </form>
+            <p class="form-note">Your data is safe and protected by OrthoNow healthcare privacy rules.</p>
+          </div>
+
+          <!-- THANK-YOU STATE -->
+          <div id="thankYouState" class="thankyou-container">
+            <svg class="success-icon-svg" viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <h2 class="thankyou-title">Appointment Requested!</h2>
+            <p class="thankyou-message" id="thankYouMsg">
+              Thank you, Patient. An OrthoNow triage specialist is validating clinic slots and will call you back within 2 minutes.
+            </p>
+            <!-- High-intent conversion acceleration button -->
+            <a href="https://wa.me/918040005000?text=I%20just%20booked%20a%20consultation%20via%20your%20site.%20Please%20confirm%20my%20slot." 
+               class="btn-whatsapp-success" 
+               id="whatsappSuccessBtn">
+              <svg class="whatsapp-icon-svg" viewBox="0 0 448 512">
+                <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+              </svg>
+              <span>Connect on WhatsApp</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-flex">
+      <div class="footer-links">
+        <a href="#privacy">Privacy Policy</a>
+        <span>&bull;</span>
+        <a href="#terms">Terms of Service</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2026 OrthoNow India. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT LOGIC
+       ========================================================================== */ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // DOM Selectors
+      const leadForm = document.getElementById('leadForm');
+      const leadName = document.getElementById('leadName');
+      const leadPhone = document.getElementById('leadPhone');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      const nameError = document.getElementById('nameError');
+      const phoneError = document.getElementById('phoneError');
+      
+      const formState = document.getElementById('formState');
+      const thankYouState = document.getElementById('thankYouState');
+      const thankYouMsg = document.getElementById('thankYouMsg');
+
+      // Setup dataLayer safety check
+      window.dataLayer = window.dataLayer || [];
+
+      /**
+       * Validates Form Fields and triggers localized error messages (CLS-safe)
+       * @returns {boolean} Whether the form inputs are valid
+       */
+      function validateForm() {
+        let isValid = true;
+
+        // Name Validation: Minimum 2 characters, alphabetical/space only
+        const nameVal = leadName.value.trim();
+        if (nameVal.length < 2) {
+          nameError.classList.add('active');
+          leadName.setAttribute('aria-invalid', 'true');
+          isValid = false;
+        } else {
+          nameError.classList.remove('active');
+          leadName.removeAttribute('aria-invalid');
+        }
+
+        // Phone Validation: Indian mobile numbers (10 digits starting with 6-9)
+        const phoneVal = leadPhone.value.trim();
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(phoneVal)) {
+          phoneError.classList.add('active');
+          leadPhone.setAttribute('aria-invalid', 'true');
+          isValid = false;
+        } else {
+          phoneError.classList.remove('active');
+          leadPhone.removeAttribute('aria-invalid');
+        }
+
+        return isValid;
+      }
+
+      /**
+       * Captures query parameters to dynamically assign traffic attribution
+       * @returns {Object} Extracted traffic source parameter tags
+       */
+      function getTrafficSource() {
+        const queryParams = new URLSearchParams(window.location.search);
+        
+        // Dynamic deduction of marketing source
+        let source = 'google_ads'; // default fallback
+        
+        if (queryParams.get('utm_source')) {
+          source = queryParams.get('utm_source');
+        } else if (queryParams.has('gclid') || queryParams.has('wbraid') || queryParams.has('gbraid')) {
+          source = 'google_ads';
+        } else if (document.referrer) {
+          try {
+            const refUrl = new URL(document.referrer);
+            if (refUrl.hostname.includes('facebook.com') || refUrl.hostname.includes('instagram.com')) {
+              source = 'meta_ads';
+            } else if (refUrl.hostname.includes('google')) {
+              source = 'google_organic';
+            } else {
+              source = refUrl.hostname;
+            }
+          } catch(e) {
+            source = 'referral';
+          }
+        } else {
+          source = 'direct';
+        }
+
+        return {
+          source: source,
+          campaign: queryParams.get('utm_campaign') || 'knee_back_bengaluru_28_50',
+          medium: queryParams.get('utm_medium') || 'cpc',
+          term: queryParams.get('utm_term') || 'no_term',
+          gclid: queryParams.get('gclid') || ''
+        };
+      }
+
+      // Input change listeners to clear error states immediately on-type
+      leadName.addEventListener('input', () => {
+        if (leadName.value.trim().length >= 2) {
+          nameError.classList.remove('active');
+          leadName.removeAttribute('aria-invalid');
+        }
+      });
+
+      leadPhone.addEventListener('input', () => {
+        if (/^[6-9]\d{9}$/.test(leadPhone.value.trim())) {
+          phoneError.classList.remove('active');
+          leadPhone.removeAttribute('aria-invalid');
+        }
+      });
+
+      // Submit Form Event
+      leadForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // 1. Client side validation check
+        if (!validateForm()) {
+          return;
+        }
+
+        // Disable submit button during processing state
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').textContent = 'Scheduling...';
+
+        const clientName = leadName.value.trim();
+        const clientPhone = leadPhone.value.trim();
+        
+        // 2. Resolve traffic source dynamically from URL/Referrer context
+        const traffic = getTrafficSource();
+        const formLoc = leadForm.getAttribute('data-location') || 'hero';
+
+        // 3. Fire custom dataLayer.push for MarTech integrations
+        window.dataLayer.push({
+          event: 'consultation_form_submitted',
+          form_location: formLoc,
+          lead_source: traffic.source,
+          utm_campaign: traffic.campaign,
+          utm_medium: traffic.medium,
+          utm_term: traffic.term,
+          gclid: traffic.gclid,
+          client_phone_hashed: btoa(clientPhone).slice(0, 15), // Safe non-PII trace for validation
+          submission_time: new Date().toISOString()
+        });
+
+        // 4. Transition layout state inline (Zero page reload)
+        setTimeout(() => {
+          formState.style.display = 'none';
+          
+          // Personalize confirmation message
+          thankYouMsg.innerHTML = `Thank you, <strong>${clientName}</strong>. An OrthoNow scheduler is verifying your phone (<strong>+91 ${clientPhone}</strong>) and booking slots. We will contact you within 2 minutes.`;
+          
+          // Modify secondary WhatsApp conversion button text dynamically
+          const waButton = document.getElementById('whatsappSuccessBtn');
+          const encodedMsg = encodeURIComponent(`Hi OrthoNow! I just booked a slot on your landing page. My name is ${clientName} (${clientPhone}). Please fast-track my consultation confirmation.`);
+          waButton.href = `https://wa.me/918040005000?text=${encodedMsg}`;
+
+          thankYouState.style.display = 'flex';
+        }, 600); // Simulate network round-trip delay realistically
+      });
+      
+    });
+  </script>
+</body>
+</html>
