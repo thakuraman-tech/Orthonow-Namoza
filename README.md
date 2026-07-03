@@ -13,4 +13,5 @@ This repository contains the deliverables for the 3-part developer assignment fo
 ## Live Deployments & Tools
 
 * **Live Demo Landing Page**: [https://thakuraman-tech.github.io/Orthonow-Namoza/task2-landing-page/index.html](https://thakuraman-tech.github.io/Orthonow-Namoza/task2-landing-page/index.html)
+* **Loom Walkthrough Video**: [https://www.loom.com/share/6cb93199d6db4ac6bca10b26008e25c0](https://www.loom.com/share/6cb93199d6db4ac6bca10b26008e25c0)
 * **Mobile PageSpeed Insights Score**: >95+ (See screenshot `task2-landing-page/mobile-pagespeed-score.png` in this repository)
