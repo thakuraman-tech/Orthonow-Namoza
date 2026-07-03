@@ -1,64 +1,21 @@
 # Task 03 — Integration Design
 
-## Data Flow Architecture
+## Integration Architecture End-to-End
 
-The data pipeline connects the landing page submission to CRM storage, automated messaging, and campaign attribution:
+To achieve a robust and scalable integration, I would architect this data flow using Make.com as the middleware connecting the custom frontend, HubSpot, and Karix.
 
-```
-[Landing Page] 
-   └── (HTTPS Webhook POST) 
-        └── [Make.com]
-             ├── 1. HubSpot Search API (Find Contact by Phone)
-             ├── 2. HubSpot Upsert Contact & Create Deal
-             ├── 3. Karix WhatsApp API (Send Template Trigger)
-             └── 4. Google Ads API (Upload Offline Conversion)
-```
-
-### Make.com Middleware Justification
-Using Make.com (or Zapier) as an integration middleware is selected over direct frontend-to-API calls or native form embeds to:
-1. **Secure API Credentials**: Prevent exposing HubSpot, Karix, and Google Ads bearer tokens to the browser.
-2. **Decouple Architecture**: Ensure the landing page loads instantly without heavy SDK scripts.
-3. **Queue Resilience**: Buffer webhook failures and rate-limiting errors natively.
+* **Data Capture (Frontend)**: Upon form submission, the vanilla JavaScript prevents the default reload and triggers an asynchronous fetch request payload to a Make.com Webhook. Simultaneously, the frontend triggers the `window.dataLayer.push`. GTM listens for this event and immediately fires the Google Ads `consultation_form_submitted` conversion tag from the client side.
+* **CRM Routing & The Deduplication Trap**: HubSpot natively deduplicates contacts using email addresses, not phone numbers. Since this lead-gen form only collects Name and Phone, relying on a standard HubSpot Form embed or a basic Zapier integration will either create massive duplicates or fail entirely. To solve this, Make.com will first execute a call to the HubSpot CRM Search API using the submitted phone number. If a match exists, Make.com updates the existing contact's details; if not, it uses the HubSpot Create API to generate a new contact, mapping the custom properties (Clinic Preference, Source = 'Google Ads - Consultation Landing Page', Lead Status = 'New Enquiry').
+* **WhatsApp Dispatch**: Once the HubSpot module returns a success status, Make.com triggers an HTTP POST request directly to the Karix WhatsApp Business API to dispatch the confirmation template.
 
 ---
 
-## CRM Deduplication & Edge Case Strategy
+## Biggest Failure Point & Fallback
 
-HubSpot natively deduplicates contacts using the `email` property. Because this campaign collects only `name` and `phone`, the standard deduplication is bypassed. 
-
-### Search API Deduplication Logic
-Make.com queries the HubSpot CRM Search API:
-* **Endpoint**: `POST https://api.hubapi.com/crm/v3/objects/contacts/search`
-* **Payload**:
-  ```json
-  {
-    "filterGroups": [{
-      "filters": [{
-        "propertyName": "phone",
-        "operator": "EQ",
-        "value": "+918040005000"
-      }]
-    }]
-  }
-  ```
-
-### Edge Case: Same Phone, Different Names (e.g., Family Members)
-Overwriting the existing contact name corrupts historic database integrity, while rejecting the submission loses new patients. 
-* **Our Resolution**:
-  1. If the contact exists, **retain the original name** on the primary record.
-  2. Map the new name to a custom auditing text field `latest_submitted_name` and check a boolean flag `name_discrepancy_detected`.
-  3. Create a **new Deal** associated with that Contact ID, titled `[New Name] - Consultation Request`.
-  4. This surfaces a discrepancy flag for the triage team to confirm details over the phone, maintaining database integrity.
+The single biggest point of failure is the middleware webhook dropping the payload due to network instability on the user's mobile device during submission. To build a strict fallback, I would implement `localStorage` caching in the frontend JavaScript. The script will save the form payload locally and continually retry the webhook fetch request until it receives a `200 OK` response, ensuring zero lead leakage due to transient drops.
 
 ---
 
-## Failure Points & SLA Mitigation
+## 2-Minute WhatsApp SLA: Risks & Monitoring
 
-### Biggest Failure Point: Karix WhatsApp API Timeout
-If the Karix API is unresponsive or rate-limited, the 2-minute SLA for automated patient outreach will be breached.
-
-### Fallback Design (Retry Queue)
-Make.com captures the payload in a native datastore queue first. If the Karix API call fails, the scenario activates an **exponential backoff retry loop** (3 attempts at 10s, 30s, and 60s). If the error persists, the payload falls back to an **alternative SMS gateway** (e.g., Twilio) within 90 seconds.
-
-### SLA Monitoring & Alerting
-We configure an automated checkpoint filter. If `now() - submission_time > 90 seconds` and WhatsApp delivery status is not `delivered`, Make.com triggers an instant webhook to Slack and the clinic dashboard, alerting the team to place a manual call immediately.
+The Karix API dispatch could breach the 2-minute SLA due to Karix server latency, Make.com execution queue delays during high traffic, or invalid phone number formats causing immediate API rejections. To monitor this, I would implement an error-handler route within Make.com. If the Karix HTTP module times out or throws a `4XX`/`5XX` error, Make.com will instantly route an alert containing the failed payload to a dedicated Slack channel via webhook. This ensures the operations team is instantly aware of SLA breaches and can initiate a manual follow-up.

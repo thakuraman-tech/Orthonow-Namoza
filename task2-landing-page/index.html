@@ -826,6 +826,89 @@
         }
       });
 
+      // Webhook Configuration (Make.com Gateway)
+      const MAKE_WEBHOOK_URL = 'https://hook.us1.make.com/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
+      /**
+       * Sends lead payload to Make.com webhook. Caches locally on failure.
+       * @param {Object} payload The lead information block
+       */
+      function submitLeadWebhook(payload) {
+        fetch(MAKE_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('Webhook rejected payload');
+          console.log('Lead successfully pushed to Make.com integration.');
+        })
+        .catch(err => {
+          console.warn('Webhook delivery failed (network offline/timeout). Caching in localStorage.', err);
+          cacheLeadForRetry(payload);
+        });
+      }
+
+      /**
+       * Caches form payloads inside localStorage to protect against network drops
+       * @param {Object} payload The lead data to cache
+       */
+      function cacheLeadForRetry(payload) {
+        let cache = [];
+        try {
+          cache = JSON.parse(localStorage.getItem('orthonow_offline_leads') || '[]');
+        } catch (e) {
+          cache = [];
+        }
+
+        const isDuplicate = cache.some(item => item.submission_time === payload.submission_time);
+        if (!isDuplicate) {
+          cache.push(payload);
+          localStorage.setItem('orthonow_offline_leads', JSON.stringify(cache));
+        }
+      }
+
+      /**
+       * Loops through cached leads and attempts re-delivery to webhook
+       */
+      function processOfflineQueue() {
+        let cache = [];
+        try {
+          cache = JSON.parse(localStorage.getItem('orthonow_offline_leads') || '[]');
+        } catch (e) {
+          return;
+        }
+
+        if (cache.length === 0) return;
+        console.log(`Processing ${cache.length} cached offline leads...`);
+
+        const attempts = cache.map(lead => {
+          return fetch(MAKE_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(lead)
+          })
+          .then(res => res.ok ? lead : null)
+          .catch(() => null);
+        });
+
+        Promise.all(attempts).then(results => {
+          const successLeads = results.filter(Boolean);
+          if (successLeads.length > 0) {
+            let currentCache = JSON.parse(localStorage.getItem('orthonow_offline_leads') || '[]');
+            const updatedCache = currentCache.filter(lead => 
+              !successLeads.some(success => success.submission_time === lead.submission_time)
+            );
+            localStorage.setItem('orthonow_offline_leads', JSON.stringify(updatedCache));
+            console.log(`Synced ${successLeads.length} leads. Remaining queue size: ${updatedCache.length}`);
+          }
+        });
+      }
+
+      // Check offline queue when connection changes or periodically
+      window.addEventListener('online', processOfflineQueue);
+      setInterval(processOfflineQueue, 30000);
+
       // Submit Form Event
       leadForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -845,8 +928,25 @@
         // 2. Resolve traffic source dynamically from URL/Referrer context
         const traffic = getTrafficSource();
         const formLoc = leadForm.getAttribute('data-location') || 'hero';
+        const timestamp = new Date().toISOString();
 
-        // 3. Fire custom dataLayer.push for MarTech integrations
+        // 3. Prepare payload for Integration
+        const leadPayload = {
+          name: clientName,
+          phone: clientPhone,
+          form_location: formLoc,
+          lead_source: traffic.source,
+          utm_campaign: traffic.campaign,
+          utm_medium: traffic.medium,
+          utm_term: traffic.term,
+          gclid: traffic.gclid,
+          submission_time: timestamp
+        };
+
+        // 4. Submit to Make Webhook (offline-resilient)
+        submitLeadWebhook(leadPayload);
+
+        // 5. Fire custom GTM/Google Ads dataLayer.push
         window.dataLayer.push({
           event: 'consultation_form_submitted',
           form_location: formLoc,
@@ -855,11 +955,11 @@
           utm_medium: traffic.medium,
           utm_term: traffic.term,
           gclid: traffic.gclid,
-          client_phone_hashed: btoa(clientPhone).slice(0, 15), // Safe non-PII trace for validation
-          submission_time: new Date().toISOString()
+          client_phone_hashed: btoa(clientPhone).slice(0, 15),
+          submission_time: timestamp
         });
 
-        // 4. Transition layout state inline (Zero page reload)
+        // 6. Transition layout state inline (Zero page reload)
         setTimeout(() => {
           formState.style.display = 'none';
           
@@ -872,6 +972,9 @@
           waButton.href = `https://wa.me/918040005000?text=${encodedMsg}`;
 
           thankYouState.style.display = 'flex';
+          
+          // Run check on offline queue immediately in case previous entries exist
+          processOfflineQueue();
         }, 600); // Simulate network round-trip delay realistically
       });
       
